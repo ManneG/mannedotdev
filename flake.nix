@@ -50,6 +50,11 @@
           };
           default = self.packages.${system}.mannedotdev;
         });
+      
+      nixosModules = {
+        mannedotdev = import ./nixosModule.nix self.packages;
+        default = self.nixosModules.mannedotdev;
+      };
 
       devShells = forAllSystems (system:
         let pkgs = nixpkgsFor.${system};
