@@ -20,7 +20,7 @@ in {
         enableACME = false;
         listen = [
           {
-            addr = "";
+            addr = "95.217.0.108";
             port = 80;
           }
         ];
@@ -40,6 +40,7 @@ in {
     systemd.user.services.mannedotdev-service = {
       enable = true;
       after = [ "network.target" ];
+      before = [ "nginx.service" ];
       wantedBy = [ "multi-user.target" ];
       description = "Webserver hosting manne.dev";
       serviceConfig = {
