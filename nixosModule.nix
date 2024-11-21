@@ -47,5 +47,7 @@ in {
           ExecStart = webserver;
       };
     };
+
+    networking.firewall.allowedTCPPorts = [ 80 ];
   };
 }
