@@ -20,13 +20,12 @@ in {
         enableACME = false;
         listen = [
           {
-            addr = "localhost";
             port = 80;
           }
         ];
 
         locations."/" = {
-          proxyPass = "127.0.0.1:8080";
+          proxyPass = "http://127.0.0.1:8080";
           proxyWebsockets = false;
           extraConfig = ''
             proxy_set_header Host $host;
