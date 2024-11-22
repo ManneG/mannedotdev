@@ -20,7 +20,7 @@ in {
         enableACME = false;
         listen = [
           {
-            addr = "127.0.0.1";
+            addr = "95.217.0.108";
             port = 80;
           }
         ];
