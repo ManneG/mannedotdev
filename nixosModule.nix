@@ -2,10 +2,25 @@ packages:
 { config, pkgs, lib, ... }:
 let
   webserver = packages.${pkgs.system}.default;
-  inherit (lib) mkIf mkEnableOption;
+  inherit (lib) mkIf mkOption mkEnableOption;
   cfg = config.mannedotdev;
-in {
-  options.mannedotdev = { enable = mkEnableOption "Enable the webserver"; };
+in assert cfg.enable -> cfg.acme.credentials != null;
+assert cfg.enable -> cfg.acme.email != null; {
+  options.mannedotdev = {
+    enable = mkEnableOption "Enable the webserver";
+    acme.credentials = mkOption {
+      type = lib.types.path;
+      default = null;
+      example = /run/secrets/credentials.ini;
+      description = "Path to CloudFlare API token";
+    };
+    acme.email = mkOption {
+      type = lib.types.str;
+      default = null;
+      example = "foo@example.com";
+      description = "ACME Email adress";
+    };
+  };
 
   config = mkIf cfg.enable {
     services.nginx = {
@@ -15,12 +30,8 @@ in {
       recommendedGzipSettings = true;
       recommendedProxySettings = true;
       virtualHosts."manne.dev" = {
-        addSSL = false;
-        enableACME = false;
-        listen = [{
-          addr = "95.217.0.108";
-          port = 80;
-        }];
+        onlySSL = true;
+        useACMEHost = "manne.dev"; # Depends on security.acme.certs."manne.dev"
 
         locations."/" = {
           proxyPass = "http://127.0.0.1:8080";
@@ -41,6 +52,19 @@ in {
       };
     };
 
-    networking.firewall.allowedTCPPorts = [ 80 ];
+    security.acme = {
+      certs."manne.dev" = {
+        credentialFiles."CLOUDFLARE_DNS_API_TOKEN_FILE" = cfg.acme.certificate;
+        dnsProvider = "cloudflare";
+        email = cfg.acme.email;
+        extraDomainNames = [ ];
+        server = "https://acme-staging-v02.api.letsencrypt.org/directory";
+        reloadServices = [ "nginx.service" ];
+      };
+
+      acceptTerms = true;
+    };
+
+    networking.firewall.allowedTCPPorts = [ 443 ];
   };
 }
