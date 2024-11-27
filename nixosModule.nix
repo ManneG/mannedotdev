@@ -54,9 +54,9 @@ assert cfg.enable -> cfg.acme.email != null;  */{
 
     security.acme = {
       certs."manne.dev" = {
-        credentialFiles."CLOUDFLARE_DNS_API_TOKEN_FILE" = ./.;#cfg.acme.certificate;
+        credentialFiles."CLOUDFLARE_DNS_API_TOKEN_FILE" = cfg.acme.certificate;
         dnsProvider = "cloudflare";
-        email = "";# cfg.acme.email;
+        email = cfg.acme.email;
         extraDomainNames = [ ];
         group = "nginx";
         server = "https://acme-staging-v02.api.letsencrypt.org/directory";
