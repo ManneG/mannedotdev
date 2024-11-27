@@ -49,7 +49,7 @@ in {
       description = "Webserver hosting manne.dev";
       serviceConfig = {
           Type = "simple";
-          ExecStart = webserver;
+          ExecStart = "${webserver}/bin/mannedotdev";
       };
     };
 
