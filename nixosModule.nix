@@ -28,9 +28,6 @@ in {
         locations."/" = {
           proxyPass = "http://127.0.0.1:8080";
           proxyWebsockets = false;
-          extraConfig = ''
-            real_ip_header X-Real-IP;
-          '';
         };
       };
     };
