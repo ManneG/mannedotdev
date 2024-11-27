@@ -44,6 +44,11 @@
 
             src = ./.;
 
+            postInstall = ''
+              mkdir -p $out/data
+              cp -r ./static $out/data
+            '';
+
             # vendorHash = pkgs.lib.fakeHash;
 
             vendorHash = null;
