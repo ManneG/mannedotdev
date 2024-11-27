@@ -34,7 +34,10 @@ in {
             
           '';*/
         };
-        locations."/test".return = "200 ok!";
+        locations."/test" = {
+          return = "200 ok!";
+          priority = 500;
+        };
       };
     };
 
