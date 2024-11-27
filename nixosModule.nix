@@ -54,7 +54,7 @@ assert cfg.enable -> cfg.acme.email != null;  */{
 
     security.acme = {
       certs."manne.dev" = {
-        credentialFiles."CLOUDFLARE_DNS_API_TOKEN_FILE" = cfg.acme.credentials;
+        credentialFiles."CLOUDFLARE_ZONE_API_TOKEN_FILE" = cfg.acme.credentials;
         dnsProvider = "cloudflare";
         email = cfg.acme.email;
         extraDomainNames = [ ];
