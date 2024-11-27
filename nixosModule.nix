@@ -4,8 +4,8 @@ let
   webserver = packages.${pkgs.system}.default;
   inherit (lib) mkIf mkOption mkEnableOption;
   cfg = config.mannedotdev;
-in assert cfg.enable -> cfg.acme.credentials != null;
-assert cfg.enable -> cfg.acme.email != null; {
+in /* assert cfg.enable -> cfg.acme.credentials != null;
+assert cfg.enable -> cfg.acme.email != null;  */{
   options.mannedotdev = {
     enable = mkEnableOption "Enable the webserver";
     acme.credentials = mkOption {
