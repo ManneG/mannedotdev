@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"os"
 )
 
 func main() {
@@ -14,7 +15,7 @@ func main() {
 
 	http.HandleFunc("GET /info", func(w http.ResponseWriter, r *http.Request) {
 		fmt.Println(r.URL.Path)
-		fmt.Fprintf(w, "You are %s visiting %s using %s.", r.RemoteAddr, r.Host, r.Proto)
+		fmt.Fprintf(w, "You are %s visiting %s using %s. %s / %s", r.RemoteAddr, r.Host, r.Proto, r.Header["Host"], r.Header["X-Real-IP"])
 	})
 
 	http.HandleFunc("/*", func(w http.ResponseWriter, r *http.Request) {
@@ -23,5 +24,7 @@ func main() {
 	})
 
 	log.Print("Listening on :8080")
+	path, _ := os.Getwd()
+	log.Print(path)
 	log.Fatal(http.ListenAndServe(":8080", nil))
 }
