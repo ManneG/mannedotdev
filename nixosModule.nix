@@ -34,17 +34,12 @@ in {
             
           '';*/
         };
-        locations."/test" = {
-          return = "200 ok!";
-          priority = 500;
-        };
       };
     };
 
-    systemd.user.services.mannedotdev-service = {
+    systemd.services.mannedotdev-service = {
       enable = true;
       after = [ "network.target" ];
-      before = [ "nginx.service" ];
       wantedBy = [ "multi-user.target" ];
       description = "Webserver hosting manne.dev";
       serviceConfig = {
