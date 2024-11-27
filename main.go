@@ -15,7 +15,7 @@ func main() {
 
 	http.HandleFunc("GET /info", func(w http.ResponseWriter, r *http.Request) {
 		fmt.Println(r.URL.Path)
-		fmt.Fprintf(w, "You are %s visiting %s using %s. %s / %s", r.RemoteAddr, r.Host, r.Proto, r.Header["Host"], r.Header["X-Real-IP"])
+		fmt.Fprintf(w, "You are %s visiting %s using %s. Header: %s", r.RemoteAddr, r.Host, r.Proto, r.Header)
 	})
 
 	http.HandleFunc("/*", func(w http.ResponseWriter, r *http.Request) {

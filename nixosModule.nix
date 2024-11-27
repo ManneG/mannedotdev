@@ -29,9 +29,7 @@ in {
           proxyPass = "http://127.0.0.1:8080";
           proxyWebsockets = false;
           extraConfig = ''
-            proxy_set_header Host $host;
-            proxy_set_header X-Real-IP $remote_addr;
-            
+            real_ip_header X-Real-IP;
           '';
         };
       };
