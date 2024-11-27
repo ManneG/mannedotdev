@@ -40,7 +40,7 @@ in {
       serviceConfig = {
           Type = "simple";
           ExecStart = "${webserver}/bin/mannedotdev";
-          WorkingDirectory="${webserver}/data"
+          WorkingDirectory="${webserver}/data";
       };
     };
 
