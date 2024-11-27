@@ -10,7 +10,7 @@ import (
 func main() {
 	http.HandleFunc("GET /{$}", func(w http.ResponseWriter, r *http.Request) {
 		fmt.Println(r.URL.Path)
-		http.ServeFile(w, r, "./index.html")
+		http.ServeFile(w, r, "./static/index.html")
 	})
 
 	http.HandleFunc("GET /info", func(w http.ResponseWriter, r *http.Request) {
@@ -29,4 +29,3 @@ func main() {
 	log.Print("PWD: ", path)
 	log.Fatal(http.ListenAndServe(":8080", nil))
 }
-

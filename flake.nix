@@ -55,7 +55,7 @@
           };
           default = self.packages.${system}.mannedotdev;
         });
-      
+
       nixosModules = {
         mannedotdev = import ./nixosModule.nix self.packages;
         default = self.nixosModules.mannedotdev;
