@@ -59,7 +59,6 @@ assert cfg.enable -> cfg.acme.email != null;  */{
         email = cfg.acme.email;
         extraDomainNames = [ ];
         group = "nginx";
-        server = "https://acme-staging-v02.api.letsencrypt.org/directory";
         reloadServices = [ "nginx.service" ];
       };
 
