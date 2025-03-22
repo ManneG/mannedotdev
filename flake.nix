@@ -49,9 +49,7 @@
               cp -r ./static $out/data
             '';
 
-            # vendorHash = pkgs.lib.fakeHash;
-
-            vendorHash = null;
+            vendorHash = "sha256-7EvBT8JiVkebxOg6+55ZABcTjSipP42X5irOKRvmTRY=";
           };
           default = self.packages.${system}.mannedotdev;
         });
