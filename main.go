@@ -2,12 +2,23 @@ package main
 
 import (
 	"fmt"
+	"io/fs"
 	"log"
 	"net/http"
 	"os"
 )
 
+var FS = os.DirFS("./static")
+
 func main() {
+	/* This could be used to give the user a nice index of the site
+	
+	direntry, _ := fs.ReadDir(FS, ".")
+	
+	for _, i := range direntry {
+		fmt.Println(i)
+	}*/
+
 	http.HandleFunc("GET /{$}", func(w http.ResponseWriter, r *http.Request) {
 		err := sendMarkdown(w, "/index")
 		if err != nil {
@@ -22,12 +33,20 @@ func main() {
 		fmt.Fprintf(w, "You are %s visiting %s at %s using %s.", r.Header["X-Forwarded-For"][0], r.Host, r.URL.Path, r.Proto)
 	})
 
-	http.HandleFunc("GET /blog/", func(w http.ResponseWriter, r *http.Request) {
-		err := sendMarkdown(w, r.URL.Path)
-		if err != nil {
-			fmt.Println(err)
-			notFound(w, r)
+	http.HandleFunc("GET /", func(w http.ResponseWriter, r *http.Request) {
+		data, err := getStaticFile(r.URL.Path)
+		if err == nil {
+			w.Write(data)
+			return
 		}
+
+		err = sendMarkdown(w, r.URL.Path)
+		if err == nil {
+			return
+		}
+
+		fmt.Println(err)
+		notFound(w, r)
 	})
 
 	http.HandleFunc("/", notFound)
@@ -41,4 +60,8 @@ func main() {
 func notFound(w http.ResponseWriter, r *http.Request) {
 	fmt.Println("404: " + r.URL.Path)
 	http.NotFound(w, r)
+}
+
+func getStaticFile(filename string) ([]byte, error) {
+	return fs.ReadFile(FS, filename[1:])
 }

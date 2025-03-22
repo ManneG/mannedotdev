@@ -1,9 +1,7 @@
 package main
 
 import (
-	"io/fs"
 	"net/http"
-	"os"
 	"regexp"
 	"text/template"
 	"github.com/gomarkdown/markdown"
@@ -47,6 +45,5 @@ func sendMarkdown(w http.ResponseWriter, path string) error {
 }
 
 func getMarkdown(filename string) ([]byte, error) {
-	FS := os.DirFS("./static")
-	return fs.ReadFile(FS, filename[1:] + ".md")
+	return getStaticFile(filename + ".md")
 }
