@@ -22,7 +22,7 @@ func main() {
 		fmt.Fprintf(w, "You are %s visiting %s at %s using %s.", r.Header["X-Forwarded-For"][0], r.Host, r.URL.Path, r.Proto)
 	})
 
-	http.HandleFunc("GET /blog", func(w http.ResponseWriter, r *http.Request) {
+	http.HandleFunc("GET /blog/", func(w http.ResponseWriter, r *http.Request) {
 		err := sendMarkdown(w, r.URL.Path)
 		if err != nil {
 			fmt.Println(err)
