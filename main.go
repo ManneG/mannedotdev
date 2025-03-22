@@ -5,10 +5,7 @@ import (
 	"log"
 	"net/http"
 	"os"
-	"strings"
 )
-
-var htmlTemplate string
 
 func main() {
 	http.HandleFunc("GET /{$}", func(w http.ResponseWriter, r *http.Request) {
@@ -44,28 +41,4 @@ func main() {
 func notFound(w http.ResponseWriter, r *http.Request) {
 	fmt.Println("404: " + r.URL.Path)
 	http.NotFound(w, r)
-}
-
-type renderOptions struct {
-	title string
-}
-
-func render(content string, options *renderOptions) (string, error) {
-	if htmlTemplate == "" {
-		bytes, err := os.ReadFile("template.html")
-		if err != nil {
-			return "", err
-		}
-		htmlTemplate = string(bytes)
-	}
-
-	title := "Manne.dev"
-	if options != nil {
-		title = options.title
-	}
-
-	temp := strings.Replace(htmlTemplate, "<content>", content, 1)
-	temp = strings.Replace(temp, "<titlecontent>", title, 1)
-
-	return temp, nil
 }
