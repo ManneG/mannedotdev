@@ -47,7 +47,7 @@
             postInstall = ''
               mkdir -p $out/data
               cp -r ./static $out/data
-              cp ./template.html $out/template.html
+              cp ./template.html $out/data/template.html
             '';
 
             vendorHash = "sha256-7EvBT8JiVkebxOg6+55ZABcTjSipP42X5irOKRvmTRY=";
