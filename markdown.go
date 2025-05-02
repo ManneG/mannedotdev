@@ -25,11 +25,16 @@ func NewPage(content string) Page {
 	return p
 }
 
-func sendMarkdown(w http.ResponseWriter, path string) error {
+func sendMarkdownFile(w http.ResponseWriter, path string) error {
 	md, err := getMarkdown(path)
 	if err != nil {
 		return err
 	}
+	sendMarkdown(w, md)
+	return nil
+}
+
+func sendMarkdown(w http.ResponseWriter, md []byte) {
 	html := markdown.ToHTML(md, nil, nil)
 
 	p := NewPage(string(html))
@@ -40,8 +45,6 @@ func sendMarkdown(w http.ResponseWriter, path string) error {
 	}
 
 	tmpl.Execute(w, p)
-
-	return nil
 }
 
 func getMarkdown(filename string) ([]byte, error) {

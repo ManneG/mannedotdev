@@ -1,0 +1,9 @@
+main{
+  text-align: center;
+  padding-top: 30vh;
+}
+
+ul{
+  width: min-content;
+  margin-inline: auto;
+}
