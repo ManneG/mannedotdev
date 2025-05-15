@@ -65,10 +65,10 @@ func main() {
 
 func notFound(w http.ResponseWriter, r *http.Request) {
 	dirPath, direntry := getClosestIndex(r.URL.Path)
-	
+
 	fileInfo, err := fs.Stat(FS, path.Clean(r.URL.Path[1:]))
 	isExistingDirectory := err == nil && fileInfo.IsDir()
-	
+
 	if isExistingDirectory {
 		md := getMarkdownIndex(dirPath, direntry)
 		NewPage().setContentMarkdown([]byte(md)).setIndex(r.URL.Path).Send(w)
@@ -91,5 +91,5 @@ func notFound(w http.ResponseWriter, r *http.Request) {
 }
 
 func getStaticFile(filename string) ([]byte, error) {
-	return fs.ReadFile(FS, path.Clean("./" + filename))
+	return fs.ReadFile(FS, path.Clean("./"+filename))
 }

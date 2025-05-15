@@ -2,39 +2,39 @@ package main
 
 import (
 	"fmt"
+	"github.com/gomarkdown/markdown"
 	"io/fs"
 	"net/http"
 	"path"
 	"regexp"
 	"text/template"
-	"github.com/gomarkdown/markdown"
 )
 
 var tmpl = template.Must(template.ParseFiles("template.html"))
+
 // [_metadata_:group1]:# "group2"
 var rMetadata = regexp.MustCompile(`(^|[^ ]) {0,3}\[_metadata_:(\w+)\]:\n?[\r\t\f\v ]*\S+\n?[\r\t\f\v ]+"(.+)"`)
 
-
 type Page struct {
-	Content string
-	Index []Index
-	DirPath string
+	Content  string
+	Index    []Index
+	DirPath  string
 	BaseName string
 	Metadata map[string]string
 }
 
 type Index struct {
 	IsDir bool
-	Href string
-	Path string
+	Href  string
+	Path  string
 }
 
 func NewPage() *Page {
 	p := Page{
-		Content: "",
-		DirPath: "",
+		Content:  "",
+		DirPath:  "",
 		BaseName: "",
-		Index: nil,
+		Index:    nil,
 		Metadata: make(map[string]string)}
 	p.Metadata["Title"] = "Manne.dev"
 	return &p
@@ -63,13 +63,13 @@ func (p *Page) setIndex(url string) *Page {
 	for n, e := range entries {
 		i := Index{
 			IsDir: e.IsDir(),
-			Href: e.Name(),
-			Path: e.Name()}
+			Href:  e.Name(),
+			Path:  e.Name()}
 		if i.IsDir {
 			i.Href += "/"
 		}
 		if path.Ext(e.Name()) == ".md" {
-			i.Href = i.Href[:len(i.Href) - 3]
+			i.Href = i.Href[:len(i.Href)-3]
 			i.Path = i.Href
 		}
 		p.Index[n] = i
@@ -107,14 +107,14 @@ func getClosestIndex(dirPath string) (string, []fs.DirEntry) {
 	var entries []fs.DirEntry
 	var err error
 	for {
-		dirPath = path.Dir(dirPath)	
-		entries, err = fs.ReadDir(FS, path.Clean("./" + dirPath))
-		
-		if(err == nil) {
-			break;
+		dirPath = path.Dir(dirPath)
+		entries, err = fs.ReadDir(FS, path.Clean("./"+dirPath))
+
+		if err == nil {
+			break
 		}
 	}
-	
+
 	if string(dirPath[len(dirPath)-1]) != "/" {
 		dirPath += "/"
 	}
@@ -124,7 +124,7 @@ func getClosestIndex(dirPath string) (string, []fs.DirEntry) {
 
 func getMarkdownIndex(path string, entries []fs.DirEntry) string {
 	md := "# Index of " + path + "\n\n"
-	if (path != "/") {
+	if path != "/" {
 		md += fmt.Sprintf("* [%[2]s](%[1]s%[2]s)\n", path, "..")
 	}
 
