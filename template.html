@@ -8,6 +8,32 @@
     <link rel="stylesheet" href="/style.css">
 </head>
 <body>
+    <header>
+        {{ define "prompt" }}
+        <span class="prompt">[visitor@manne.dev:{{ .DirPath }}]$</span>
+        {{ end }}
+        {{ if .Index }}
+        <nav>
+            {{ template "prompt" . }}<span> tree -L1</span>
+
+            <div class="dir" style="margin: 0 0.6ch;">{{ .DirPath }}</div>
+            <ul>
+            
+                {{ if slice .DirPath 1 }}
+                    <li><a href=".." class="dir">..</a></li>
+                {{ end }}
+
+                {{ range .Index }}
+                <li><a href="{{ .Href }}" {{ if .IsDir }} class="dir" {{ end }}>{{ .Path }}</a></li>
+                {{ end }}
+            </ul>
+        </nav>
+        {{ end }}
+
+        {{ if .BaseName }}
+        {{ template "prompt" . }}<span> cat {{ .BaseName }}</span>
+        {{ end }}
+    </header>
     <main>
         {{.Content}}
     </main>

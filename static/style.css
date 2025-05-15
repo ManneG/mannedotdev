@@ -3,7 +3,42 @@ main{
   padding-top: 30vh;
 }
 
+header {
+  font-family: monospace;
+  color: whitesmoke;
+  background-color: #272630;
+
+  border: 3px solid gray;
+  border-radius: 1ch;
+  padding: 1ch;
+
+  position: relative;
+}
+
+header span.prompt{
+  color: lime;
+  font-weight: bold;
+}
+
 ul{
   width: min-content;
   margin-inline: auto;
+}
+
+nav ul {
+  list-style: "\251C\2500";
+  margin: 0 -3ch;
+}
+
+nav ul > li:last-child {
+  list-style: "\2514\2500";
+}
+
+nav a {
+  color: whitesmoke;
+  text-decoration: none;
+}
+
+nav .dir {
+  color: #3370ff;
 }

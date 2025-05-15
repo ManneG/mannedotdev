@@ -14,11 +14,16 @@ var FS = os.DirFS("./static")
 
 func main() {
 	http.HandleFunc("GET /{$}", func(w http.ResponseWriter, r *http.Request) {
-		err := sendMarkdownFile(w, "/index")
+		md, err := getMarkdown("/index")
 		if err != nil {
-			fmt.Println(err)
-			notFound(w, r)
+			fmt.Println("index errored")
+			return
 		}
+
+		p := NewPage()
+		p.setContentMarkdown(md)
+		p.setIndex("/")
+		p.Send(w)
 	})
 
 	http.HandleFunc("GET /info", func(w http.ResponseWriter, r *http.Request) {
@@ -41,8 +46,9 @@ func main() {
 
 		w.Header().Set("Content-Type", "text/html; charset=utf-8")
 
-		err = sendMarkdownFile(w, r.URL.Path)
+		md, err := getMarkdown(r.URL.Path)
 		if err == nil {
+			NewPage().setContentMarkdown(md).setIndex(r.URL.Path).Send(w)
 			return
 		}
 
@@ -58,32 +64,19 @@ func main() {
 }
 
 func notFound(w http.ResponseWriter, r *http.Request) {
-	dirPath := r.URL.Path
-	var direntry []fs.DirEntry
-	var err error
-
-	for {
-		dirPath = path.Dir(dirPath)	
-		direntry, err = fs.ReadDir(FS, path.Clean("./" + dirPath))
-		
-		if(err == nil) {
-			break;
-		}
-	}
+	dirPath, direntry := getClosestIndex(r.URL.Path)
 	
-	if string(dirPath[len(dirPath)-1]) != "/" {
-		dirPath += "/"
-	}
-	isExistingDirectory := dirPath == r.URL.Path
+	fileInfo, err := fs.Stat(FS, path.Clean(r.URL.Path[1:]))
+	isExistingDirectory := err == nil && fileInfo.IsDir()
 	
 	if isExistingDirectory {
 		md := getMarkdownIndex(dirPath, direntry)
-		sendMarkdown(w, []byte(md))
+		NewPage().setContentMarkdown([]byte(md)).setIndex(r.URL.Path).Send(w)
 		return
 	}
 
 	fmt.Println("404: " + r.URL.Path)
-	//http.NotFound(w, r)
+
 	headers := w.Header()
 	headers.Del("Content-Length")
 	headers.Set("Content-Type", "text/html; charset=utf-8")
@@ -98,24 +91,5 @@ func notFound(w http.ResponseWriter, r *http.Request) {
 }
 
 func getStaticFile(filename string) ([]byte, error) {
-	return fs.ReadFile(FS, filename[1:])
-}
-
-func getMarkdownIndex(path string, entries []fs.DirEntry) string {
-	md := "# Index of " + path + "\n\n"
-	md += fmt.Sprintf("* [%[2]s](%[1]s%[2]s)\n", path, "..")
-
-	for _, e := range entries {
-		relPath := e.Name()
-		if e.IsDir() {
-			relPath += "/"
-		}
-		if relPath[len(relPath)-3:] == ".md" {
-			relPath = relPath[:len(relPath)-3]
-		} else {
-		}
-		md += fmt.Sprintf("* [%[2]s](%[1]s%[2]s)\n", path, relPath)
-	}
-
-	return md + "\n"
+	return fs.ReadFile(FS, path.Clean("./" + filename))
 }
