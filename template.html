@@ -20,7 +20,7 @@
             <ul>
             
                 {{ if slice .DirPath 1 }}
-                    <li><a href=".." class="dir">..</a></li>
+                    <li><a href="{{ .DirPath }}/.." class="dir">..</a></li>
                 {{ end }}
 
                 {{ range .Index }}
@@ -30,8 +30,14 @@
         </nav>
         {{ end }}
 
-        {{ if .BaseName }}
-        {{ template "prompt" . }}<span> cat {{ .BaseName }}</span>
+        {{ if .RelPath }}
+        {{ template "prompt" . }}<span> cat {{ .RelPath }}</span>
+        {{ end }}
+        {{ if .ExtraPrompt }}
+            {{ if .ExtraPrompt.Command }}
+                {{ template "prompt" . }}<span> {{ .ExtraPrompt.Command }}</span>
+            {{ end }}
+        {{ .ExtraPrompt.OutputHTML }}
         {{ end }}
     </header>
     <main>

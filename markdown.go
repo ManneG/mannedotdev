@@ -18,8 +18,9 @@ var rMetadata = regexp.MustCompile(`(^|[^ ]) {0,3}\[_metadata_:(\w+)\]:\n?[\r\t\
 type Page struct {
 	Content  string
 	Index    []Index
+	ExtraPrompt Prompt
 	DirPath  string
-	BaseName string
+	RelPath string
 	Metadata map[string]string
 }
 
@@ -29,11 +30,16 @@ type Index struct {
 	Path  string
 }
 
+type Prompt struct {
+	Command string
+	OutputHTML string
+}
+
 func NewPage() *Page {
 	p := Page{
 		Content:  "",
 		DirPath:  "",
-		BaseName: "",
+		RelPath: "",
 		Index:    nil,
 		Metadata: make(map[string]string)}
 	p.Metadata["Title"] = "Manne.dev"
@@ -62,7 +68,7 @@ func (p *Page) setIndex(url string) *Page {
 	p.Index = make([]Index, len(entries))
 
 	if dirPath != url {
-		p.BaseName = path.Base(url)
+		p.RelPath = url[len(dirPath):]
 	}
 
 	for n, e := range entries {
@@ -79,6 +85,13 @@ func (p *Page) setIndex(url string) *Page {
 		}
 		p.Index[n] = i
 	}
+	return p
+}
+
+func (p *Page) setExtraPrompt(command, outputHTML string) *Page {
+	p.ExtraPrompt = Prompt{
+		Command: command,
+		OutputHTML: outputHTML}
 	return p
 }
 

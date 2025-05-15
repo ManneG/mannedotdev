@@ -16,7 +16,7 @@ func main() {
 	http.HandleFunc("GET /{$}", func(w http.ResponseWriter, r *http.Request) {
 		md, err := getMarkdown("/index")
 		if err != nil {
-			fmt.Println("index errored")
+			notFound(w, r)
 			return
 		}
 
@@ -84,10 +84,13 @@ func notFound(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(404)
 
 	md := "# Error 404: Not Found\n\n"
-	md += "This file or directory does not exist\n\n#"
-	md += getMarkdownIndex(dirPath, direntry)
+	md += "This file or directory does not exist\n\n"
 	md += "[_metadata_:Title]:# \"404 Not Found\""
-	sendMarkdown(w, []byte(md))
+	p := NewPage()
+	p.setContentMarkdown([]byte(md))
+	p.setIndex(r.URL.Path)
+	p.setExtraPrompt("", "<div>cat: "+r.URL.Path[len(dirPath):]+": No such file or directory</div>")
+	p.Send(w)
 }
 
 func getStaticFile(filename string) ([]byte, error) {
