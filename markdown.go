@@ -46,6 +46,11 @@ func (p *Page) setContentHTML(html string) *Page {
 }
 
 func (p *Page) setContentMarkdown(md []byte) *Page {
+	metadatatags := rMetadata.FindAllStringSubmatch(string(md), -1)
+	for _, tag := range metadatatags {
+		p.Metadata[tag[2]] = tag[3]
+	}
+
 	p.Content = string(markdown.ToHTML(md, nil, nil))
 	return p
 }
@@ -78,11 +83,6 @@ func (p *Page) setIndex(url string) *Page {
 }
 
 func (p *Page) Send(w http.ResponseWriter) {
-	metadatatags := rMetadata.FindAllStringSubmatch(p.Content, -1)
-	for _, tag := range metadatatags {
-		p.Metadata[tag[2]] = tag[3]
-	}
-
 	tmpl.Execute(w, p)
 }
 
