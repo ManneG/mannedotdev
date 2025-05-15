@@ -22,7 +22,7 @@ func main() {
 
 		p := NewPage()
 		p.setContentMarkdown(md)
-		p.setIndex("/")
+		p.setIndex("/index")
 		p.Send(w)
 	})
 

@@ -27,7 +27,8 @@ ul{
 
 nav ul {
   list-style: "\251C\2500";
-  margin: 0 -3ch;
+  margin: 0;
+  padding: 0 2ch;
 }
 
 nav ul > li:last-child {

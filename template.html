@@ -16,7 +16,7 @@
         <nav>
             {{ template "prompt" . }}<span> tree -L1</span>
 
-            <div class="dir" style="margin: 0 0.6ch;">{{ .DirPath }}</div>
+            <div class="dir">{{ .DirPath }}</div>
             <ul>
             
                 {{ if slice .DirPath 1 }}

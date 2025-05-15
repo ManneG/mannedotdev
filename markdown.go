@@ -53,7 +53,7 @@ func (p *Page) setContentMarkdown(md []byte) *Page {
 func (p *Page) setIndex(url string) *Page {
 	dirPath, entries := getClosestIndex(url)
 
-	p.DirPath = dirPath
+	p.DirPath = path.Clean(dirPath)
 	p.Index = make([]Index, len(entries))
 
 	if dirPath != url {
