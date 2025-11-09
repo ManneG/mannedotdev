@@ -65,6 +65,9 @@
         in {
           default = pkgs.mkShell {
             buildInputs = with pkgs; [ go gopls gotools go-tools ];
+            shellHook = ''
+              PS1="\n\[\033[1;36m\]\[\e]0;devshell: \w\a\]devshell\$\[\033[0m\] "
+            '';
           };
           withpackage =
             pkgs.mkShell { buildInputs = [ self.packages.${system}.default ]; };
