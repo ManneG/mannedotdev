@@ -1,26 +1,71 @@
-main{
+:root {
+  --bg-dark: oklch(0.92 0.035 86);
+  --bg: oklch(0.96 0.035 86);
+  --bg-light: oklch(1 0.035 86);
+  --text: oklch(0.15 0.07 86);
+  --text-muted: oklch(0.4 0.07 86);
+  --highlight: oklch(1 0.07 86);
+  --border: oklch(0.6 0.07 86);
+  --border-muted: oklch(0.7 0.07 86);
+  --primary: oklch(0.4 0.1 86);
+  --secondary: oklch(0.4 0.1 266);
+  --danger: oklch(0.5 0.07 30);
+  --warning: oklch(0.5 0.07 100);
+  --success: oklch(0.5 0.07 160);
+  --info: oklch(0.5 0.07 260);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg-dark: oklch(0.1 0.035 86);
+    --bg: oklch(0.15 0.035 86);
+    --bg-light: oklch(0.2 0.035 86);
+    --text: oklch(0.96 0.07 86);
+    --text-muted: oklch(0.76 0.07 86);
+    --highlight: oklch(0.5 0.07 86);
+    --border: oklch(0.4 0.07 86);
+    --border-muted: oklch(0.3 0.07 86);
+    --primary: oklch(0.76 0.1 86);
+    --secondary: oklch(0.76 0.1 266);
+    --danger: oklch(0.7 0.07 30);
+    --warning: oklch(0.7 0.07 100);
+    --success: oklch(0.7 0.07 160);
+    --info: oklch(0.7 0.07 260);
+  }
+}
+
+body {
+  background-color: var(--bg-dark);
+  color: var(--text-muted);
+}
+
+a {
+  color: var(--secondary);
+}
+
+main {
   text-align: center;
   padding-top: 30vh;
 }
 
 header {
   font-family: monospace;
-  color: whitesmoke;
-  background-color: #272630;
+  color: var(--text-muted);
+  background-color: var(--bg);
 
-  border: 3px solid gray;
+  border: 3px solid var(--border);
   border-radius: 1ch;
   padding: 1ch;
 
   position: relative;
 }
 
-header span.prompt{
-  color: lime;
+header span.prompt {
+  color: var(--success);
   font-weight: bold;
 }
 
-ul{
+ul {
   width: min-content;
   margin-inline: auto;
 }
@@ -36,10 +81,10 @@ nav ul > li:last-child {
 }
 
 nav a {
-  color: whitesmoke;
   text-decoration: none;
 }
 
 nav .dir {
-  color: #3370ff;
+  color: var(--secondary);
 }
+
