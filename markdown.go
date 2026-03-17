@@ -16,12 +16,12 @@ var tmpl = template.Must(template.ParseFiles("template.html"))
 var rMetadata = regexp.MustCompile(`(^|[^ ]) {0,3}\[_metadata_:(\w+)\]:\n?[\r\t\f\v ]*\S+\n?[\r\t\f\v ]+"(.+)"`)
 
 type Page struct {
-	Content  string
-	Index    []Index
+	Content     string
+	Index       []Index
 	ExtraPrompt Prompt
-	DirPath  string
-	RelPath string
-	Metadata map[string]string
+	DirPath     string
+	RelPath     string
+	Metadata    map[string]string
 }
 
 type Index struct {
@@ -31,7 +31,7 @@ type Index struct {
 }
 
 type Prompt struct {
-	Command string
+	Command    string
 	OutputHTML string
 }
 
@@ -39,7 +39,7 @@ func NewPage() *Page {
 	p := Page{
 		Content:  "",
 		DirPath:  "",
-		RelPath: "",
+		RelPath:  "",
 		Index:    nil,
 		Metadata: make(map[string]string)}
 	p.Metadata["Title"] = "Manne.dev"
@@ -90,7 +90,7 @@ func (p *Page) setIndex(url string) *Page {
 
 func (p *Page) setExtraPrompt(command, outputHTML string) *Page {
 	p.ExtraPrompt = Prompt{
-		Command: command,
+		Command:    command,
 		OutputHTML: outputHTML}
 	return p
 }
